@@ -1,6 +1,5 @@
 const winston = require('winston');
 const Sentry = require('winston-sentry');
-const git = require('git-rev-sync');
 
 function getLogger(mod) {
   const path = mod.filename.split('/').slice(-2).join('/');
@@ -21,7 +20,7 @@ function getLogger(mod) {
         app: process.env.SENTRY_APP,
         environment: process.env.SENTRY_ENVIRONMENT,
       },
-      release: git.long(),
+      release: process.env.SENTRY_RELEASE,
       patchGlobal: true,
     }));
   }

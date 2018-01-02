@@ -9,6 +9,7 @@ Winston logger with sentry configuration included. Also show the file from which
 | SENTRY_DSN           | Sentry's DNS                                 |
 | SENTRY_APP           | The application's name                       |
 | SENTRY_ENVIRONMENT   | The environment running (dev, staging, prod) |
+| SENTRY_RELEASE       | The current release                          |
 
 ## Usage
 
