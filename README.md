@@ -14,8 +14,9 @@ Winston logger with sentry configuration included. Also show the file from which
 ## Usage
 
 ```sh
-npm install --save git+https://github.com/quintoandar/node-logger.git
+npm install --save git+https://github.com/quintoandar/node-logger.git#<latest-release-version>
 ```
+[See releases](https://github.com/quintoandar/node-logger/releases)
 
 ```js
 const logger = require('quintoandar-logger').getLogger(module);
