@@ -1,5 +1,5 @@
 {
-  "name": "5a-node-logger",
+  "name": "quintoandar-logger",
   "version": "0.0.1",
   "description": "Winston logger with custom 5A configuration",
   "main": "src/main.js",

@@ -18,7 +18,7 @@ npm install --save git+https://github.com/quintoandar/node-logger.git
 ```
 
 ```js
-const logger = require('5a-node-logger').getLogger(module);
+const logger = require('quintoandar-logger').getLogger(module);
 
 logger.info("Some info");
 ```
