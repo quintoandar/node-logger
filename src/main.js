@@ -22,6 +22,7 @@ function getLogger(mod) {
       },
       release: process.env.SENTRY_RELEASE,
       patchGlobal: true,
+      install: true,
     }));
   }
 
