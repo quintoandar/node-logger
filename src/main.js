@@ -1,9 +1,50 @@
 const winston = require('winston');
 const Sentry = require('raven');
+const extend = require('lodash/extend');
 
 const logFormat = winston.format.printf(info => {
   return `${info.timestamp} [${info.level}]: ${info.message}`;
 });
+
+function sentryTransport() {
+  const client = new Sentry.Client({
+    dsn: process.env.SENTRY_DSN,
+    tags: {
+      app: process.env.SENTRY_APP,
+      environment: process.env.SENTRY_ENVIRONMENT,
+    },
+    release: process.env.SENTRY_RELEASE,
+  });
+
+  client.log = (level, msg, meta) => {
+    meta = meta || {};
+
+    extra = {
+      'level': level,
+      'extra': meta,
+    }
+
+    try {
+      if (level == 'error') {
+        if (meta instanceof Error) {
+          if (msg == '') {
+            msg = meta;
+          } else {
+            meta.message = msg + ". Cause: " + meta.message;
+            msg = meta;
+          }
+        }
+        client.captureException(msg, extra);
+      } else {
+        client.captureMessage(msg, extra);
+      }
+    } catch(err) {
+      console.error(err);
+    }
+  }
+
+  return client;
+}
 
 function getLogger() {
   const transports = [
@@ -20,14 +61,7 @@ function getLogger() {
   ];
 
   if (process.env.SENTRY_DSN) {
-    transports.push(new Sentry.Client({
-      dsn: process.env.SENTRY_DSN,
-      tags: {
-        app: process.env.SENTRY_APP,
-        environment: process.env.SENTRY_ENVIRONMENT,
-      },
-      release: process.env.SENTRY_RELEASE,
-    }));
+    transports.push(sentryTransport());
   }
 
   return winston.createLogger({ transports });
