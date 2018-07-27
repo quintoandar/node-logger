@@ -5,7 +5,7 @@
   "main": "src/main.js",
   "dependencies": {
     "winston": "^2.3.1",
-    "winston-sentry": "^0.2.1"
+    "winston-raven-sentry": "^1.0.1"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
