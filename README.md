@@ -10,6 +10,7 @@ Winston logger with sentry configuration included. Also show the file from which
 | SENTRY_APP           | The application's name                       |
 | SENTRY_ENVIRONMENT   | The environment running (dev, staging, prod) |
 | SENTRY_RELEASE       | The current release                          |
+| CONSOLE_LOG_LEVEL    | The level of the logs displayed on the console (optional, defaults to info) |
 
 ## Usage
 

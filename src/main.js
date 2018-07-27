@@ -7,7 +7,7 @@ function getLogger(mod) {
     new (winston.transports.Console)({
       timestamp: true,
       colorize: false,
-      level: 'info',
+      level: process.env.CONSOLE_LOG_LEVEL || 'info',
       label: path,
       stderrLevels: ['error']
     }),
