@@ -1,34 +1,28 @@
 const winston = require('winston');
-const Sentry = require('winston-sentry');
+const Sentry = require('raven');
 
-function getLogger(mod) {
-  const path = mod.filename.split('/').slice(-2).join('/');
+function getLogger() {
   const transports = [
-    new (winston.transports.Console)({
-      timestamp: true,
-      colorize: false,
+    new winston.transports.Console({
       level: 'silly',
-      label: path,
+      format: winston.format.timestamp(),
+      stderrLevels: ['error'],
+      consoleWarnLevels: ['warn']
     }),
   ];
 
   if (process.env.SENTRY_DSN) {
-    transports.push(new Sentry({
-      level: 'warn',
+    transports.push(new Sentry.Client({
       dsn: process.env.SENTRY_DSN,
       tags: {
         app: process.env.SENTRY_APP,
         environment: process.env.SENTRY_ENVIRONMENT,
       },
       release: process.env.SENTRY_RELEASE,
-      patchGlobal: true,
-      install: true,
     }));
   }
 
-  return new (winston.Logger)({transports});
+  return winston.createLogger({ transports });
 }
 
-module.exports = {
-  getLogger,
-};
+module.exports = getLogger;
