@@ -1,6 +1,5 @@
 const winston = require('winston');
 const Sentry = require('raven');
-const extend = require('lodash/extend');
 
 const logFormat = winston.format.printf(info => {
   return `${info.timestamp} [${info.level}]: ${info.message}`;
