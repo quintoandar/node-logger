@@ -1,5 +1,5 @@
 const winston = require('winston');
-const Sentry = require('winston-sentry');
+const Sentry = require('winston-raven-sentry');
 
 function getLogger(mod) {
   const path = mod.filename.split('/').slice(-2).join('/');
@@ -7,8 +7,9 @@ function getLogger(mod) {
     new (winston.transports.Console)({
       timestamp: true,
       colorize: false,
-      level: 'silly',
+      level: process.env.CONSOLE_LOG_LEVEL || 'info',
       label: path,
+      stderrLevels: ['error']
     }),
   ];
 
@@ -21,7 +22,6 @@ function getLogger(mod) {
         environment: process.env.SENTRY_ENVIRONMENT,
       },
       release: process.env.SENTRY_RELEASE,
-      patchGlobal: true,
       install: true,
     }));
   }
