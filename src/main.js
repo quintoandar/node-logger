@@ -1,10 +1,10 @@
-const winston = require('winston');
+const { transports, createLogger } = require('winston');
 const Sentry = require('winston-raven-sentry');
 
 function getLogger(mod) {
   const path = mod.filename.split('/').slice(-2).join('/');
-  const transports = [
-    new (winston.transports.Console)({
+  const winstonTransports = [
+    new (transports.Console)({
       timestamp: true,
       colorize: false,
       level: process.env.CONSOLE_LOG_LEVEL || 'info',
@@ -26,7 +26,9 @@ function getLogger(mod) {
     }));
   }
 
-  return new (winston.Logger)({transports});
+  return createLogger({
+    transports: winstonTransports,
+  });
 }
 
 module.exports = {
