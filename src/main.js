@@ -14,7 +14,7 @@ function getLogger(mod) {
   ];
 
   if (process.env.SENTRY_DSN) {
-    transports.push(new Sentry({
+    winstonTransports.push(new Sentry({
       level: 'warn',
       dsn: process.env.SENTRY_DSN,
       tags: {
