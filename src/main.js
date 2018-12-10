@@ -21,6 +21,9 @@ function getLogger(mod) {
         app: process.env.SENTRY_APP,
         environment: process.env.SENTRY_ENVIRONMENT,
       },
+      config: { 
+        captureUnhandledRejections: CAPTURE_UNHANDLED_REJECTIONS || false,
+      },
       release: process.env.SENTRY_RELEASE,
       install: true,
     }));
