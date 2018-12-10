@@ -22,7 +22,7 @@ function getLogger(mod) {
         environment: process.env.SENTRY_ENVIRONMENT,
       },
       config: { 
-        captureUnhandledRejections: CAPTURE_UNHANDLED_REJECTIONS || false,
+        captureUnhandledRejections: process.env.CAPTURE_UNHANDLED_REJECTIONS || false,
       },
       release: process.env.SENTRY_RELEASE,
       install: true,
