@@ -1,15 +1,19 @@
-const { transports, createLogger } = require('winston');
+const { transports, format, createLogger } = require('winston');
 const Sentry = require('winston-raven-sentry');
+const { loggerName, extraData } = require('./customFormats');
 
 function getLogger(mod) {
   const path = mod.filename.split('/').slice(-2).join('/');
   const winstonTransports = [
-    new (transports.Console)({
-      timestamp: true,
-      colorize: false,
+    new transports.Console({
+      format: format.combine(
+        extraData(),
+        loggerName(path),
+        format.timestamp(),
+        format.json(),
+      ),
       level: process.env.CONSOLE_LOG_LEVEL || 'info',
-      label: path,
-      stderrLevels: ['error']
+      stderrLevels: ['error'],
     }),
   ];
 
@@ -21,7 +25,7 @@ function getLogger(mod) {
         app: process.env.SENTRY_APP,
         environment: process.env.SENTRY_ENVIRONMENT,
       },
-      config: { 
+      config: {
         captureUnhandledRejections: process.env.CAPTURE_UNHANDLED_REJECTIONS || false,
       },
       release: process.env.SENTRY_RELEASE,
