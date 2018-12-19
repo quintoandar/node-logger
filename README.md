@@ -31,34 +31,24 @@ Or add it on your `package.json` file like:
 
 ## Usage
 
-### Info
-
-When logging info you are able to send the string (the info message) plus any other metadata you want as the second parameter.
+With info, warn and error messages the behaviour is the same. You are able to send the string (the info message) plus any other metadata you want as the second parameter, but be sure to add this data on a specific key named `extra` so that Sentry knows how to parse it and display it.
 
 ```js
 const logger = require('quintoandar-logger').getLogger(module);
 
 const object = { id: 11, someInfo: 'someInfo' }
-logger.info(`Some info about processing cool object with id ${object.id}`, { data: object });
-```
-
-It will be logged as a json:
-```sh
-{"level":"info","message":"Some info about processing cool object with id 10","extra_data":{"data":{"id":"11","someInfo":"someInfo"}},"logger_name":"path/to/my/file.js","timestamp":"2018-12-19T18:15:57.078Z"}
-```
-
-### Warning and Error
-
-With warning and error messages the behaviour is similar, with one differece: both level of logging are submitted to Sentry, so if you want to submit metadata you need to include it on a specific key named `extra`.
-
-```js
-const logger = require('quintoandar-logger').getLogger(module);
-
-const object = { id: 11, someInfo: 'someInfo' }
+logger.info(`Some info about processing cool object with id ${object.id}`, { extra: { data: object } });
+logger.warn(`Some warning about processing cool object with id ${object.id}`, { extra: { data: object } });
 logger.error(`Some error while processing cool object with id ${object.id}`, { extra: { data: object } });
 ```
 
-And then it will be displayed on Sentry under the field `Additional Data`.
+On the console it will be logged as a json:
+It will be logged as a json:
+```sh
+{"level":"info","message":"Some info about processing cool object with id 10","extra_data":{"extra":{"data":{"id":"11","someInfo":"someInfo"}}},"logger_name":"path/to/my/file.js","timestamp":"2018-12-19T18:15:57.078Z"}
+```
+
+And on sentry the data on `extra` it will be displayed on Sentry under the field `Additional Data`.
 
 ## TODO
 
