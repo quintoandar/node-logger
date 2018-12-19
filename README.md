@@ -43,12 +43,11 @@ logger.error(`Some error while processing cool object with id ${object.id}`, { e
 ```
 
 On the console it will be logged as a json:
-It will be logged as a json:
 ```sh
 {"level":"info","message":"Some info about processing cool object with id 10","extra_data":{"extra":{"data":{"id":"11","someInfo":"someInfo"}}},"logger_name":"path/to/my/file.js","timestamp":"2018-12-19T18:15:57.078Z"}
 ```
 
-And on sentry the data on `extra` it will be displayed on Sentry under the field `Additional Data`.
+And on Sentry the data on `extra` will be displayed under the field `Additional Data`.
 
 ## TODO
 
