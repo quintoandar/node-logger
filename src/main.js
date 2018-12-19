@@ -1,17 +1,16 @@
 const { transports, format, createLogger } = require('winston');
 const Sentry = require('winston-raven-sentry');
+const { loggerName, extraData } = require('./customFormats');
 
 function getLogger(mod) {
   const path = mod.filename.split('/').slice(-2).join('/');
   const winstonTransports = [
     new transports.Console({
       format: format.combine(
-        format.align(),
-        format.metadata(),
-        format.label({ label: path }),
-        format.colorize(),
+        extraData(),
+        loggerName(path),
         format.timestamp(),
-        format.simple(),
+        format.json(),
       ),
       level: process.env.CONSOLE_LOG_LEVEL || 'info',
       stderrLevels: ['error'],
