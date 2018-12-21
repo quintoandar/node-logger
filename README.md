@@ -113,6 +113,15 @@ try {
 }
 ```
 
+========================
+
+CHECK THIS ^
+
+should it really be happening? logger.error(string) should still show stacktrace and code snipets, shouldn't it?
+
+========================
+
+
 ## Metadata and other options
 
 As mentioned before, when logging something the second argument can be any sort of "metadata", however there are some specific keys that have helpful behaviours you should be aware of.
