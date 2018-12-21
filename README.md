@@ -43,7 +43,7 @@ Sentry logging won't start if these values are not defined.
 
 By default the configuration of this lib will:
 * Log uncaught errors.
-* Log uncaught promise rejections
+* Log uncaught promise rejections.
 
 Without the need of any additional configuration/options.
 
