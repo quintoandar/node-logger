@@ -9,13 +9,13 @@ logger.info('testing info...', { extra: { data: 'data' } });
 
 /**
  * Logging as warning, sending both extra data and also setting a fingerprint
- * without the fingerprint you would have three different warning logs
+ * without the fingerprint you would have three different warning logs:
  *
  * testing warning 0...
  * testing warning 1...
  * testing warning 2...
  *
- * But with the fingerprint, you will have all these logs grouped together
+ * But with the fingerprint, you will have all these logs grouped together on Sentry.
  */
 for (let i = 0; i < 3; i += 1) {
   logger.warn(`testing warning ${i}...`, { fingerprint: ['somefingerprint'], extra: { data: 'data' } });
@@ -35,7 +35,6 @@ logger.error('testing error...', { tags: { cool: 'tag' }, extra: { data: 'data' 
 logger.error(new Error('testing real error'),
   { extra: { data: 'data', object: { info: 'info', array: [{ moreInfo: 'even more info' }] } } });
 
-
 /**
  * Here we are throwing an error in an async function, and not catching it.
  * This is to show the default configuration is to log Unhandled Promise Rejections.
@@ -45,7 +44,7 @@ fn();
 
 /**
  * Here we are throwing an error in async function, and not catching it.
- * This is to show the default configuration is to all errors, even uncaught errors.
+ * This is to show the default configuration is to log all errors, even uncaught errors.
  */
 const fn2 = () => { throw Error('UNHANDLED ERROR!'); };
 fn2();

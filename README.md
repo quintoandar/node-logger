@@ -39,15 +39,15 @@ Or add it on your `package.json` file like:
 
 ## Usage
 
-With info, warn and error messages the behaviour is the same. You are able to send the string (the info message) plus any other metadata you want as the second parameter, but be sure to add this data on a specific key named `extra` so that Sentry knows how to parse it and display it.
+### Info and Warning
 
+With info and warning messages the behaviour is the same. You are able to send the string (the info message) plus any other metadata you want as the second parameter.
 ```js
 const logger = require('quintoandar-logger').getLogger(module);
 
 const object = { id: 11, someInfo: 'someInfo' }
 logger.info(`Some info about processing cool object with id ${object.id}`, { extra: { data: object } });
 logger.warn(`Some warning about processing cool object with id ${object.id}`, { extra: { data: object } });
-logger.error(`Some error while processing cool object with id ${object.id}`, { extra: { data: object } });
 ```
 
 On the console it will be logged as a json:
@@ -55,9 +55,90 @@ On the console it will be logged as a json:
 {"level":"info","message":"Some info about processing cool object with id 10","extra_data":{"extra":{"data":{"id":"11","someInfo":"someInfo"}}},"logger_name":"path/to/my/file.js","timestamp":"2018-12-19T18:15:57.078Z"}
 ```
 
-And on Sentry the data on `extra` will be displayed under the field `Additional Data`.
+### Error
 
-## TODO
+With error messages, while really similar to both info and warning, there are some small differences. You are able to log error messages using a string, like the previous examples:
+```js
+const logger = require('quintoandar-logger').getLogger(module);
 
-- Create Express Middleware Request Logger
+const object = { id: 11, someInfo: 'someInfo' }
+logger.error(`Some error about processing cool object with id ${object.id}`, { extra: { data: object } });
+```
 
+And on the console you will have:
+```sh
+{"level":"error","message":"Some error about processing cool object with id 10","extra_data":{"extra":{"data":{"id":"11","someInfo":"someInfo"}}},"logger_name":"path/to/my/file.js","timestamp":"2018-12-19T18:15:57.078Z"}
+```
+
+However keep in mind that when this information is sent to Sentry, you will not be able to see any stacktrace and code snipets. Sentry is only able to show that information with an object of type `Error`. So the best way to log an error would be:
+```js
+const logger = require('quintoandar-logger').getLogger(module);
+
+const object = { id: 11, someInfo: 'someInfo' }
+try {
+  functionThatWillThrowAnError(object);
+} catch (error) {
+  logger.error(error, {
+    extra: {
+      message:`Some error about processing cool object with id ${object.id}`,
+      data: object
+    }
+  });
+}
+```
+
+## Metadata and other options when logging
+
+As mentioned before, when logging something the second argument can be any sort of "metadata", however there are some specific keys that have helpful behaviours you should be aware of.
+
+### Extra
+
+When the second argument is an object with a key `extra`, all the information inside of it will be displayed on Sentry under "Additional Data". For exmaple:
+```js
+const logger = require('quintoandar-logger').getLogger(module);
+
+logger.error(new Error('testing real error'),
+  { extra: { data: 'data', object: { info: 'info', array: [{ moreInfo: 'even more info' }] } } );
+```
+
+On Sentry you will see:
+
+![](./additional_data.png)
+
+### Tags
+
+Some times you might want to send some specific tag with your logs, so you can also further filter all your logs based on it. This is possible with the key `tags`:
+
+```js
+const logger = require('quintoandar-logger').getLogger(module);
+
+logger.error('testing error...', { tags: { cool: 'tag' }, extra: { data: 'data' } });
+```
+
+On Sentry you will see:
+
+![](./tags.png)
+
+The tag `app` is created by default by using the `SENTRY_APP` environment variable.
+
+
+### Fingerprint
+
+Sentry always group logs by the message. However some times, even if the messages are different, you do want all the logs to be grouped together. This can be achieved by using the key `fingerprint`:
+```js
+const logger = require('quintoandar-logger').getLogger(module);
+
+for (let i = 0; i < 3; i += 1) {
+  logger.warn(`testing warning ${i}...`, { fingerprint: ['somefingerprint'], extra: { data: 'data' } });
+}
+```
+
+With this, all logs `testing warning 0...`, `testing warning 1...`, ,`testing warning 2...`, will be grouped in Sentry.
+
+On Sentry you will see the events on the same log:
+
+![](./fingerprints.png)
+
+## Examples
+
+You can check more examples [here](./example).
