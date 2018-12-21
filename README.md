@@ -2,9 +2,27 @@
 
 Winston logger with sentry configuration included. Also show the file from which the log originated.
 
-## Environment variable
+## Table of contents
 
-### Mandatory (Sentry logging won't start if they are not defined)
+* [Environment Variables](#environment-Variablss)
+  * [Mandatory](#mandatory)
+  * [Optional](#optional)
+* [Default Behaviours](#default-behaviours)
+* [Setting up](#setting-up)
+* [Usage](#usage)
+  * [Info and Warning](#info-and-Warning)
+  * [Error](#error)
+* [Metadata and other options](#metadata-and-other-options)
+  * [Extra](#extra)
+  * [Tags](#tags)
+  * [Fingerprint](#fingerprint)
+* [Examples](#examples)
+
+## Environment Variables
+
+### Mandatory
+
+Sentry logging won't start if these values are not defined.
 
 |        Name          |                 Description                       |
 | -------------------- | ------------------------------------------------- |
@@ -20,6 +38,14 @@ Winston logger with sentry configuration included. Also show the file from which
 | SENTRY_RELEASE       | The current application release (defaults to None) |
 | CONSOLE_LOG_LEVEL    | The level of the logs displayed on the console (defaults to info and up) |
 | SENTRY_LOG_LEVEL     | The level of the logs submitted to Sentry (defaults to warn and up) |
+
+## Default Behaviours
+
+By default the configuration of this lib will:
+* Log uncaught errors.
+* Log uncaught promise rejections
+
+Without the need of any additional configuration/options.
 
 ## Setting up
 
@@ -87,7 +113,7 @@ try {
 }
 ```
 
-## Metadata and other options when logging
+## Metadata and other options
 
 As mentioned before, when logging something the second argument can be any sort of "metadata", however there are some specific keys that have helpful behaviours you should be aware of.
 
@@ -121,7 +147,6 @@ On Sentry you will see:
 
 The tag `app` is created by default by using the `SENTRY_APP` environment variable.
 
-
 ### Fingerprint
 
 Sentry always group logs by the message. However some times, even if the messages are different, you do want all the logs to be grouped together. This can be achieved by using the key `fingerprint`:
@@ -133,9 +158,7 @@ for (let i = 0; i < 3; i += 1) {
 }
 ```
 
-With this, all logs `testing warning 0...`, `testing warning 1...`, ,`testing warning 2...`, will be grouped in Sentry.
-
-On Sentry you will see the events on the same log:
+With this, all logs `testing warning 0...`, `testing warning 1...`, ,`testing warning 2...`, will be grouped in Sentry. You will see the events on the same log:
 
 ![](./fingerprints.png)
 
