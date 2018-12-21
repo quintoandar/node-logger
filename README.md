@@ -4,14 +4,22 @@ Winston logger with sentry configuration included. Also show the file from which
 
 ## Environment variable
 
+### Mandatory (Sentry logging won't start if they are not defined)
+
+|        Name          |                 Description                       |
+| -------------------- | ------------------------------------------------- |
+| SENTRY_DSN           | Sentry's DNS                                      |
+| SENTRY_APP           | The application's name                            |
+| SENTRY_ENVIRONMENT   | The environment running (dev, staging, prod, etc) |
+
+
+### Optional
+
 |        Name          |                 Description                  |
 | -------------------- | -------------------------------------------- |
-| SENTRY_DSN           | Sentry's DNS                                 |
-| SENTRY_APP           | The application's name                       |
-| SENTRY_ENVIRONMENT   | The environment running (dev, staging, prod) |
-| SENTRY_RELEASE       | The current release                          |
-| CONSOLE_LOG_LEVEL    | The level of the logs displayed on the console (optional, defaults to info) |
-| CAPTURE_UNHANDLED_REJECTIONS  | A value (true or false) saying if you want these exceptions to be logged in you app |
+| SENTRY_RELEASE       | The current application release (defaults to None) |
+| CONSOLE_LOG_LEVEL    | The level of the logs displayed on the console (defaults to info and up) |
+| SENTRY_LOG_LEVEL     | The level of the logs submitted to Sentry (defaults to warn and up) |
 
 ## Setting up
 
@@ -23,8 +31,8 @@ Or add it on your `package.json` file like:
 
 ```sh
 "dependencies": {
-    "quintoandar-logger": "git+https://github.com/quintoandar/node-logger.git#<latest-release-version>",
-  },
+  "quintoandar-logger": "git+https://github.com/quintoandar/node-logger.git#<latest-release-version>",
+},
 ```
 
 [See releases](https://github.com/quintoandar/node-logger/releases)

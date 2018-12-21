@@ -1,14 +1,21 @@
 {
   "name": "quintoandar-logger",
-  "version": "1.0.0",
+  "version": "4.0.0",
   "description": "Winston logger with custom 5A configuration",
   "main": "src/main.js",
   "dependencies": {
     "winston": "^3.1.0",
-    "winston-raven-sentry": "^2.0.0"
+    "winston-transport": "^4.2.0",
+    "@sentry/node": "^4.4.2"
+  },
+  "devDependencies": {
+    "eslint": "^5.10.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "eslint": "eslint ./ && npm run eslint"
   },
   "repository": {
     "type": "git",

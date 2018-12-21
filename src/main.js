@@ -1,14 +1,17 @@
 const { transports, format, createLogger } = require('winston');
-const Sentry = require('winston-raven-sentry');
-const { loggerName, extraData } = require('./customFormats');
+const { includeLoggerName, includeExtraData } = require('./custom-formats');
+const SentryTransport = require('./sentry-transport');
 
-function getLogger(mod) {
+const shouldAttachSentryTransport = () => process.env.SENTRY_DSN
+  && process.env.SENTRY_APP && process.env.SENTRY_ENVIRONMENT;
+
+const getLogger = (mod) => {
   const path = mod.filename.split('/').slice(-2).join('/');
   const winstonTransports = [
     new transports.Console({
       format: format.combine(
-        extraData(),
-        loggerName(path),
+        includeExtraData(),
+        includeLoggerName(path),
         format.timestamp(),
         format.json(),
       ),
@@ -17,26 +20,16 @@ function getLogger(mod) {
     }),
   ];
 
-  if (process.env.SENTRY_DSN) {
-    winstonTransports.push(new Sentry({
-      level: 'warn',
-      dsn: process.env.SENTRY_DSN,
-      tags: {
-        app: process.env.SENTRY_APP,
-        environment: process.env.SENTRY_ENVIRONMENT,
-      },
-      config: {
-        captureUnhandledRejections: process.env.CAPTURE_UNHANDLED_REJECTIONS || false,
-      },
-      release: process.env.SENTRY_RELEASE,
-      install: true,
+  if (shouldAttachSentryTransport()) {
+    winstonTransports.push(new SentryTransport({
+      level: process.env.SENTRY_LOG_LEVEL || 'warn',
     }));
   }
 
   return createLogger({
     transports: winstonTransports,
   });
-}
+};
 
 module.exports = {
   getLogger,

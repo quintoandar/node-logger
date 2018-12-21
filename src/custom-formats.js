@@ -1,6 +1,6 @@
 const { format } = require('winston');
 
-function fillExcept(info, fillExceptKeys, metadataKey) {
+const fillExcept = (info, fillExceptKeys, metadataKey) => {
   const savedKeys = fillExceptKeys.reduce((acc, key) => {
     acc[key] = info[key];
     delete info[key];
@@ -16,18 +16,18 @@ function fillExcept(info, fillExceptKeys, metadataKey) {
     [metadataKey]: metadata
   });
   return info;
-}
+};
 
-function fillWith(info, fillWithKeys, metadataKey) {
+const fillWith = (info, fillWithKeys, metadataKey) => {
   info[metadataKey] = fillWithKeys.reduce((acc, key) => {
     acc[key] = info[key];
     delete info[key];
     return acc;
   }, {});
   return info;
-}
+};
 
-const extraData = format((info, opts = {}) => {
+const includeExtraData = format((info, opts = {}) => {
   let metadataKey = 'extra_data';
   if (opts.key) {
     metadataKey = opts.key;
@@ -54,12 +54,12 @@ const extraData = format((info, opts = {}) => {
   return info;
 });
 
-const loggerName = format((info, path) => {
+const includeLoggerName = format((info, path) => {
   info.logger_name = path;
   return info;
 });
 
 module.exports = {
-  loggerName,
-  extraData,
+  includeLoggerName,
+  includeExtraData,
 };
