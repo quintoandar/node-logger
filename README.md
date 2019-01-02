@@ -96,7 +96,7 @@ And on the console you will have:
 {"level":"error","message":"Some error about processing cool object with id 10","extra_data":{"extra":{"data":{"id":"11","someInfo":"someInfo"}}},"logger_name":"path/to/my/file.js","timestamp":"2018-12-19T18:15:57.078Z"}
 ```
 
-However keep in mind that when this information is sent to Sentry, you will not be able to see any stacktrace and code snipets. Sentry is only able to show that information with an object of type `Error`. So the best way to log an error would be:
+However, when an error occurs, it's preferable to instead send the `Error` object (and if a message is necessary you can send it on the extra object). This way Sentry can display what kind of error it really is (TypeError, SyntaxError, etc...). The best way to log an error would be:
 ```js
 const logger = require('quintoandar-logger').getLogger(module);
 
@@ -112,15 +112,6 @@ try {
   });
 }
 ```
-
-========================
-
-CHECK THIS ^
-
-should it really be happening? logger.error(string) should still show stacktrace and code snipets, shouldn't it?
-
-========================
-
 
 ## Metadata and other options
 
