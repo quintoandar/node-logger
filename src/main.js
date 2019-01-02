@@ -22,7 +22,14 @@ const getLogger = (mod) => {
 
   if (shouldAttachSentryTransport()) {
     winstonTransports.push(new SentryTransport({
-      level: process.env.SENTRY_LOG_LEVEL || 'warn',
+      winstonOpts: {
+        level: process.env.SENTRY_LOG_LEVEL || 'warn',
+      },
+      sentryOpts: {
+        dsn: process.env.SENTRY_DSN,
+        environment: process.env.SENTRY_ENVIRONMENT,
+        release: process.env.SENTRY_RELEASE,
+      }
     }));
   }
 

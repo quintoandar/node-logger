@@ -3,13 +3,11 @@ const Sentry = require('@sentry/node');
 const { isError } = require('util');
 
 module.exports = class SentryTransport extends Transport {
-  constructor(opts) {
-    super(opts);
-
+  constructor({ winstonOpts, sentryOpts }) {
+    super(winstonOpts);
     Sentry.init({
-      dsn: process.env.SENTRY_DSN,
-      environment: process.env.SENTRY_ENVIRONMENT,
-      release: process.env.SENTRY_RELEASE,
+      ...sentryOpts,
+      integrations: integrations => integrations.filter(integration => integration.name !== 'InboundFilters')
     });
   }
 
