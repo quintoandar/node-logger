@@ -48,3 +48,13 @@ fn();
  */
 const fn2 = () => { throw Error('UNHANDLED ERROR!'); };
 fn2();
+
+/**
+ * Logging error object, with circular references.
+ */
+const a = new Error('circular error');
+const o = { data: 'data' };
+o.circular = o;
+a.testing = o;
+logger.error(a,
+  { extra: { data: 'data', object: { info: 'info', array: [{ moreInfo: 'even more info' }] } } });
