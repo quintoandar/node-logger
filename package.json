@@ -4,8 +4,12 @@
   "description": "Winston logger with custom 5A configuration",
   "main": "src/main.js",
   "dependencies": {
-    "winston": "^3.1.0",
-    "winston-raven-sentry": "^2.0.0"
+    "@sentry/node": "^5.17.0",
+    "lodash": "^4.17.15",
+    "stack-trace": "0.0.10",
+    "util": "^0.12.3",
+    "winston": "^3.2.1",
+    "winston-transport": "^4.3.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
