@@ -1,9 +1,9 @@
 declare namespace quintoandar_logger {
     interface logger {
-        error: (module: string, details: unknown[]) => void
-        warn: (module: string, details: unknown[]) => void
-        debug: (module: string, details: unknown[]) => void
-        info: (module: string, details: unknown[]) => void
+        error: (...details: unknown[]) => void
+        warn: (...details: unknown[]) => void
+        debug: (...details: unknown[]) => void
+        info: (...details: unknown[]) => void
     }
 
     type currentRootSpanType = {
@@ -12,11 +12,15 @@ declare namespace quintoandar_logger {
     type tracerType = {
         currentRootSpan: currentRootSpanType
     }
+
+    interface loggerBuilder {
+        getLogger(mod: NodeModule): loggerBuilder.logger
+    }
 }
 
-declare class quintoandar_logger {
-    setTracer: (newTracer: loggerBuilder.tracerType) => void
-    getLogger: (mod: string) => loggerBuilder.logger
+declare module quintoandar_logger {
+    function setTracer(newTracer: quintoandar_logger.tracerType): quintoandar_logger.loggerBuilder
+    function getLogger(mod: NodeModule): quintoandar_logger.logger
 }
 
 export = quintoandar_logger

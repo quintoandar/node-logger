@@ -46,7 +46,7 @@ function getFunctionData(func) {
     if (caller) {
         data.caller = caller;
     }
-    
+
     return data;
 }
 
@@ -182,10 +182,13 @@ if (process.env.NODE_ENV === 'test') {
 }
 
 module.exports = {
-    setTracer: (newTracer) =>  tracer = newTracer,
+    setTracer: (newTracer) =>  {
+        tracer = newTracer;
+        return this;
+    },
     getLogger: (mod) => {
         const module = mod.filename.split('/').slice(-2).join('/');
-        
+
         return {
             error: (...params) => errorLog(module, ...params),
             warn: (...params) => warnLog(module, ...params),
