@@ -1,4 +1,4 @@
-declare namespace loggerBuilder {
+declare namespace quintoandar_logger {
     interface logger {
         error: (module: string, details: unknown[]) => void
         warn: (module: string, details: unknown[]) => void
@@ -14,9 +14,9 @@ declare namespace loggerBuilder {
     }
 }
 
-declare class loggerBuilder {
-    setTracer: (newTracer: loggerBuilder.tracerType) =>void
+declare class quintoandar_logger {
+    setTracer: (newTracer: loggerBuilder.tracerType) => void
     getLogger: (mod: string) => loggerBuilder.logger
 }
 
-export = loggerBuilder
+export = quintoandar_logger
