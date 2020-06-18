@@ -1,6 +1,6 @@
 {
   "name": "quintoandar-logger",
-  "version": "1.0.0",
+  "version": "3.0.1",
   "description": "Winston logger with custom 5A configuration",
   "main": "src/main.js",
   "dependencies": {
