@@ -23,5 +23,6 @@
   "bugs": {
     "url": "https://github.com/quintoandar/node-logger/issues"
   },
-  "homepage": "https://github.com/quintoandar/node-logger#readme"
+  "homepage": "https://github.com/quintoandar/node-logger#readme",
+  "types": "./types.d.ts"
 }
