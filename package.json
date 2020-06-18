@@ -1,6 +1,6 @@
 {
   "name": "quintoandar-logger",
-  "version": "1.0.0",
+  "version": "3.1.0",
   "description": "Winston logger with custom 5A configuration",
   "main": "src/main.js",
   "dependencies": {
@@ -23,5 +23,6 @@
   "bugs": {
     "url": "https://github.com/quintoandar/node-logger/issues"
   },
-  "homepage": "https://github.com/quintoandar/node-logger#readme"
+  "homepage": "https://github.com/quintoandar/node-logger#readme",
+  "types": "./src/types.d.ts"
 }
