@@ -1,26 +1,19 @@
-declare namespace quintoandar_logger {
-    interface logger {
-        error: (...details: unknown[]) => void
-        warn: (...details: unknown[]) => void
-        debug: (...details: unknown[]) => void
-        info: (...details: unknown[]) => void
-    }
+declare module quintoandar_logger {
 
-    type currentRootSpanType = {
+    type LoggerMethod = import('winston').LeveledLogMethod
+    type LogLevels = "error" | "warn" | "debug" | "info"
+    type Logger = Record<LogLevels, LoggerMethod>
+    type CurrentRootSpan = {
         traceId: string
     }
-    type tracerType = {
-        currentRootSpan: currentRootSpanType
+    type Tracer = {
+        currentRootSpan: CurrentRootSpan
     }
-
-    interface loggerBuilder {
-        getLogger(mod: NodeModule): loggerBuilder.logger
+    function getLogger(mod: NodeModule): Logger
+    function setTracer(newTracer: Tracer): QuintoLogger
+    interface QuintoLogger {
+        getLogger: typeof getLogger
+        setTracer: typeof setTracer
     }
 }
-
-declare module quintoandar_logger {
-    function setTracer(newTracer: quintoandar_logger.tracerType): quintoandar_logger.loggerBuilder
-    function getLogger(mod: NodeModule): quintoandar_logger.logger
-}
-
 export = quintoandar_logger
