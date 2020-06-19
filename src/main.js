@@ -181,10 +181,10 @@ if (process.env.NODE_ENV === 'test') {
     };
 }
 
-module.exports = {
+const logger = {
     setTracer: (newTracer) =>  {
         tracer = newTracer;
-        return this;
+        return logger;
     },
     getLogger: (mod) => {
         const module = mod.filename.split('/').slice(-2).join('/');
@@ -197,3 +197,5 @@ module.exports = {
         };
     }
 };
+
+module.exports = logger;
