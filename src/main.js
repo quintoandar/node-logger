@@ -12,17 +12,15 @@ const winstonTransports = [
     consoleTransport,
 ];
 
-if(process.env.SENTRY_DSN && process.env.NODE_ENV !== 'development') {
-    Sentry.init({
-        serverName: process.env.SENTRY_APP,
-        dsn: process.env.SENTRY_DSN,
-        environment: process.env.SENTRY_ENVIRONMENT,
-        debug: process.env.NODE_ENV !== 'production',
-        release: process.env.SENTRY_RELEASE,
-    });
-}
-
 let tracer;
+let sentryParams = {
+    serverName: process.env.SENTRY_APP,
+    dsn: process.env.SENTRY_DSN,
+    environment: process.env.SENTRY_ENVIRONMENT,
+    debug: process.env.NODE_ENV !== 'production',
+    release: process.env.SENTRY_RELEASE,
+};
+
 const prettyLogs = process.env.PRETTY_LOGS;
 const winstonLogger = createLogger({
     transports: winstonTransports,
@@ -186,6 +184,15 @@ const logger = {
         tracer = newTracer;
         return logger;
     },
+    startSentry: (newSentryParams) => {
+        Object.assign(sentryParams, newSentryParams);
+
+        if(initSentry && process.env.SENTRY_DSN && process.env.NODE_ENV !== 'development') {
+            Sentry.init(sentryParams);
+        }
+        return logger;
+    },
+
     getLogger: (mod) => {
         const module = mod.filename.split('/').slice(-2).join('/');
 
