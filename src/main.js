@@ -187,7 +187,7 @@ const logger = {
     startSentry: (newSentryParams) => {
         Object.assign(sentryParams, newSentryParams);
 
-        if(process.env.SENTRY_DSN && process.env.NODE_ENV !== 'development') {
+        if(sentryParams.dsn && !sentryParams.debug) {
             Sentry.init(sentryParams);
         }
         return logger;
