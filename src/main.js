@@ -50,10 +50,7 @@ function getFunctionData(func) {
 
 function formatParams(params, module, funcCallerParam) {
     function formatError(err) {
-        return {
-            message: err.message,
-            stack: err.stack,
-        };
+        return err;
     }
 
     const funcCaller = funcCallerParam || {};
@@ -150,7 +147,7 @@ const _consoleWarn = console.warn;
 const sentryMessageToAvoid = 'Sentry Logger';
 const sentryMessageType = 'string';
 
-if (process.env.NODE_ENV === 'test') {
+if (process.env.NODE_ENV !== 'test') {
     console.log = function (...params) {
         _consoleLog.apply(console, ['\u001b[31;1m', ...params, '\u001b[39;49m']);
         if ((typeof params[0] === sentryMessageType) && (params[0].includes(sentryMessageToAvoid))) return;
