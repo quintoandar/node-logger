@@ -19,7 +19,6 @@ let sentryParams = {
     environment: process.env.SENTRY_ENVIRONMENT,
     debug: process.env.NODE_ENV !== 'production',
     release: process.env.SENTRY_RELEASE,
-    integrations: [new Sentry.Integrations.ExtraErrorData({ depth: 4 })],
     normalizeDepth: 5,
 };
 
