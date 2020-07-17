@@ -45,8 +45,8 @@ class SentryTransport extends Transport {
         let error = {};
 
         if (thereIsErrorExtraData) {
-            error = info.extra.error;
-            info.extra.error = util.inspect(error, { showHidden: false, depth: null });
+            error = info.error;
+            info.error = util.inspect(error, { showHidden: false, depth: null });
         }
 
         Sentry.configureScope((scope) => {
