@@ -50,10 +50,6 @@ function getFunctionData(func) {
 }
 
 function formatParams(params, module, funcCallerParam) {
-    function formatError(err) {
-        return err;
-    }
-
     const funcCaller = funcCallerParam || {};
     const result = [];
     const metadata = {};
@@ -66,7 +62,7 @@ function formatParams(params, module, funcCallerParam) {
         result[0] = params[0];
     } else if (params[0] instanceof Error) {
         result[0] = params[0].message;
-        metadata.error = formatError(params[0]);
+        metadata.error = params[0];
     } else {
         result[0] = util.inspect(params[0], {
             compact: prettyLogs,
@@ -78,7 +74,7 @@ function formatParams(params, module, funcCallerParam) {
 
     for (let i = 1; i < params.length; i++) {
         if (params[i] instanceof Error) {
-            metadata.error = formatError(params[i]);
+            metadata.error = params[i];
         } else if (typeof params[i] === 'object') {
             if (!metadata.extra) {
                 metadata.extra = {};
