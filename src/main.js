@@ -12,17 +12,16 @@ const winstonTransports = [
     consoleTransport,
 ];
 
-if(process.env.SENTRY_DSN && process.env.NODE_ENV !== 'development') {
-    Sentry.init({
-        serverName: process.env.SENTRY_APP,
-        dsn: process.env.SENTRY_DSN,
-        environment: process.env.SENTRY_ENVIRONMENT,
-        debug: process.env.NODE_ENV !== 'production',
-        release: process.env.SENTRY_RELEASE,
-    });
-}
-
 let tracer;
+let sentryParams = {
+    serverName: process.env.SENTRY_APP,
+    dsn: process.env.SENTRY_DSN,
+    environment: process.env.SENTRY_ENVIRONMENT,
+    debug: process.env.NODE_ENV !== 'production',
+    release: process.env.SENTRY_RELEASE,
+    normalizeDepth: 5,
+};
+
 const prettyLogs = process.env.PRETTY_LOGS;
 const winstonLogger = createLogger({
     transports: winstonTransports,
@@ -51,13 +50,6 @@ function getFunctionData(func) {
 }
 
 function formatParams(params, module, funcCallerParam) {
-    function formatError(err) {
-        return {
-            message: err.message,
-            stack: err.stack,
-        };
-    }
-
     const funcCaller = funcCallerParam || {};
     const result = [];
     const metadata = {};
@@ -70,7 +62,7 @@ function formatParams(params, module, funcCallerParam) {
         result[0] = params[0];
     } else if (params[0] instanceof Error) {
         result[0] = params[0].message;
-        metadata.error = formatError(params[0]);
+        metadata.error = params[0];
     } else {
         result[0] = util.inspect(params[0], {
             compact: prettyLogs,
@@ -82,7 +74,7 @@ function formatParams(params, module, funcCallerParam) {
 
     for (let i = 1; i < params.length; i++) {
         if (params[i] instanceof Error) {
-            metadata.error = formatError(params[i]);
+            metadata.error = params[i];
         } else if (typeof params[i] === 'object') {
             if (!metadata.extra) {
                 metadata.extra = {};
@@ -152,7 +144,7 @@ const _consoleWarn = console.warn;
 const sentryMessageToAvoid = 'Sentry Logger';
 const sentryMessageType = 'string';
 
-if (process.env.NODE_ENV === 'test') {
+if (process.env.NODE_ENV !== 'test') {
     console.log = function (...params) {
         _consoleLog.apply(console, ['\u001b[31;1m', ...params, '\u001b[39;49m']);
         if ((typeof params[0] === sentryMessageType) && (params[0].includes(sentryMessageToAvoid))) return;
@@ -181,11 +173,20 @@ if (process.env.NODE_ENV === 'test') {
     };
 }
 
-module.exports = {
+const logger = {
     setTracer: (newTracer) =>  {
         tracer = newTracer;
-        return this;
+        return logger;
     },
+    startSentry: (newSentryParams) => {
+        Object.assign(sentryParams, newSentryParams);
+
+        if(sentryParams.dsn && !sentryParams.debug) {
+            Sentry.init(sentryParams);
+        }
+        return logger;
+    },
+
     getLogger: (mod) => {
         const module = mod.filename.split('/').slice(-2).join('/');
 
@@ -197,3 +198,5 @@ module.exports = {
         };
     }
 };
+
+module.exports = logger;

@@ -40,21 +40,28 @@ class SentryTransport extends Transport {
         if (this.silent) return next(null, true);
         if (!(info.level in this._levelsMap)) return next(null, true);
 
-        const thereIsErrorExtraData = info.extra && info.extra.error && (info.extra.error instanceof Error);
+        const thereIsErrorExtraData = info.error && (info.error instanceof Error);
 
         let error = {};
 
         if (thereIsErrorExtraData) {
-            error = info.extra.error;
-            info.extra.error = util.inspect(error, { showHidden: false, depth: null });
+            error = info.error;
+            info.error = util.inspect(error, { showHidden: false, depth: null });
         }
 
         Sentry.configureScope((scope) => {
             scope.setLevel(this._levelsMap[info.level]);
-            scope.setExtra('context', info);
+            Object.entries(info)
+            .filter(([ key ]) => ['error', 'level'].includes(key) === false)
+            .forEach(([ key, value ]) => {
+                scope.setExtra(key, value);
+            })
         });
 
-        if (thereIsErrorExtraData) Sentry.captureMessage(error);
+        if (thereIsErrorExtraData) {
+            Sentry.setExtra(error);
+            Sentry.captureMessage(error);
+        }
         else Sentry.captureMessage(info.message);
 
         return next();
