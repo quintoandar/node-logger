@@ -2,6 +2,8 @@
 
 Winston logger with sentry configuration included. Also show the module, file path and caller from which the log originated.
 
+**Now with types**
+
 ## Environment variable
 
 |        Name          |                 Description                  |
@@ -41,15 +43,15 @@ Since the Kibana application, by default, set a timestamp value to its logs, if 
 const logger = require('quintoandar-logger').getLogger(module);
 
 const object = { id: 11, someInfo: 'someInfo' }
-logger.info(`Some info about processing cool object with id ${object.id}`, { extra: { data: object } });
-logger.warn(`Some warning about processing cool object with id ${object.id}`, { extra: { data: object } });
-logger.error(`Some error while processing cool object with id ${object.id}`, { extra: { data: object } });
+logger.info(`Some info about processing cool object with id ${object.id}`, object);
+logger.warn(`Some warning about processing cool object with id ${object.id}`, object);
+logger.error(`Some error while processing cool object with id ${object.id}`, object);
 ```
 
 On the console it will be logged as a json:
 
 ```sh
-[info] Some info about processing cool object with id 11 { extra: { extra: { data: { id: 11, someInfo: 'someInfo' } } }, module: 'path/to/my/file.js', timestamp: '2020-06-09T22:46:21.759Z'}
+[info] Some info about processing cool object with id 11 { extra: { id: 11, someInfo: 'someInfo' } }, module: 'path/to/my/file.js', timestamp: '2020-06-09T22:46:21.759Z'}
 ```
 
 With pretty log enabled:
@@ -58,11 +60,8 @@ With pretty log enabled:
 [info] Some info about processing cool object with id 11
 {
   extra: {
-    extra: {
-      data: {
         id: 11,
         someInfo: 'someInfo'
-      }
     }
   },
   module: 'path/to/my/file.js',
@@ -71,6 +70,16 @@ With pretty log enabled:
 ```
 
 And on Sentry the data on `extra` will be displayed under the field `Additional Data`.
+
+## Sentry
+
+There is a method tha can start sentry for you.
+
+```js
+const quintoandarLogger = require('quintoandar-logger');
+const sentryParams = {} //there are some default values if object is empty
+const logger = quintoandarLogger.startSentry(sentryParams).getLogger(module)
+```
 
 ### Tracer
 
@@ -81,19 +90,17 @@ On your code, you just need to intanciate the tracer within the logger library o
 ```js
 const tracer = { currentRootSpan: { traceId: 'TRACER-ID' } };
 
-const quintoandarLogger = require('./src/main');
-quintoandarLogger.setTracer(tracer);
-
-const logger = quintoandarLogger.getLogger(module);
+const quintoandarLogger = require('quintoandar-logger');
+const logger = quintoandarLogger.startSentry({}).setTracer(tracer).getLogger(module);
 
 const object = { id: 11, someInfo: 'someInfo' }
-logger.info(`Some info about processing cool object with id ${object.id}`, { extra: { data: object } });
+logger.info(`Some info about processing cool object with id ${object.id}`, object } });
 ```
 
 At your console, the logs now contain the trace-id identifier:
 
 ```sh
-[info] Some info about processing cool object with id 11 [trace-id: TRACER-ID] { extra: { extra: { data: { id: 11, someInfo: 'someInfo' } } }, module: 'path/to/my/file.js', timestamp: '2020-06-09T22:46:21.759Z'}
+[info] Some info about processing cool object with id 11 [trace-id: TRACER-ID] { extra: { id: 11, someInfo: 'someInfo' } }, module: 'path/to/my/file.js', timestamp: '2020-06-09T22:46:21.759Z'}
 ```
 
 ## TODO
