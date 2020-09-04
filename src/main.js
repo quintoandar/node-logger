@@ -80,8 +80,19 @@ function formatParams(params, module, funcCallerParam) {
             if (!metadata.extra) {
                 metadata.extra = {};
             }
+            const name = (params[i].constructor && params[i].constructor.name) || params[i].name
 
-            Object.assign(metadata.extra, params[i]);
+            if (name) {
+                if (name in metadata.extra) {
+                    Object.assign(metadata.extra[name], params[i])
+                }
+                else {
+                    metadata.extra[name] = params[i]
+                }
+            }
+            else {
+                Object.assign(metadata.extra, params[i]);
+            }
         }
     }
 
