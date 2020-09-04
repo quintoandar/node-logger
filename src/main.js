@@ -1,3 +1,4 @@
+const os = require('os');
 const util = require('util');
 const stackTrace = require('stack-trace');
 const Sentry = require('@sentry/node');
@@ -14,7 +15,7 @@ const winstonTransports = [
 
 let tracer;
 let sentryParams = {
-    serverName: process.env.SENTRY_APP,
+    serverName: os.hostname(),
     dsn: process.env.SENTRY_DSN,
     environment: process.env.SENTRY_ENVIRONMENT,
     debug: process.env.NODE_ENV !== 'production',
@@ -178,11 +179,18 @@ const logger = {
         tracer = newTracer;
         return logger;
     },
-    startSentry: (newSentryParams) => {
+    startSentry: (newSentryParams, sentryFunction) => {
         Object.assign(sentryParams, newSentryParams);
 
         if(sentryParams.dsn && !sentryParams.debug) {
             Sentry.init(sentryParams);
+            if (process.env.SENTRY_APP) {
+                Sentry.setTag('app', process.env.SENTRY_APP)
+            }
+
+            if (sentryFunction && typeof(sentryFunction) === 'function') {
+                sentryFunction(Sentry)
+            }
         }
         return logger;
     },
