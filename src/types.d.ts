@@ -7,7 +7,7 @@ declare module quintoandar_logger {
     type LogLevels = "error" | "warn" | "debug" | "info"
     type Logger = Record<LogLevels, LoggerMethod>
 
-    type SentryFunc = undefined | ((Sentry) => void)
+    type SentryFunc = ((Sentry) => void)
     type TracerBase = {
         readonly active: boolean;
     }
@@ -15,6 +15,7 @@ declare module quintoandar_logger {
 
     function getLogger(mod: NodeModule): Logger
     function setTracer(newTracer: TracerBase): QuintoLogger
+    function startSentry(newSentryParams: SentryParams): QuintoLogger
     function startSentry(newSentryParams: SentryParams, sentryFunc: SentryFunc): QuintoLogger
     interface QuintoLogger {
         getLogger: typeof getLogger
