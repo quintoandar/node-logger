@@ -76,7 +76,7 @@ function formatParams(params, module, funcCallerParam) {
     for (let i = 1; i < params.length; i++) {
         if (params[i] instanceof Error) {
             metadata.error = params[i];
-        } else if (typeof params[i] === 'object') {
+        } else if (params[i] && typeof params[i] === 'object') {
             if (!metadata.extra) {
                 metadata.extra = {};
             }
