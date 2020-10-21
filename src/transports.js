@@ -51,11 +51,7 @@ class SentryTransport extends Transport {
 
         Sentry.configureScope((scope) => {
             scope.setLevel(this._levelsMap[info.level]);
-            Object.entries(info)
-            .filter(([ key ]) => ['error', 'level'].includes(key) === false)
-            .forEach(([ key, value ]) => {
-                scope.setExtra(key, value);
-            })
+            scope.setExtra(info.meta);
         });
 
         if (thereIsErrorExtraData) {
