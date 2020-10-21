@@ -1,6 +1,5 @@
 const os = require('os');
 const util = require('util');
-const lodash = require('lodash')
 const stackTrace = require('stack-trace');
 const Sentry = require('@sentry/node');
 const { createLogger } = require('winston');
