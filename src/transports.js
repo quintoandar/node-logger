@@ -49,16 +49,18 @@ class SentryTransport extends Transport {
             info.error = util.inspect(error, { showHidden: false, depth: null });
         }
 
-        Sentry.configureScope((scope) => {
+        Sentry.withScope((scope) => {
             scope.setLevel(this._levelsMap[info.level]);
             scope.setTag("traceId", info.traceId)
-            scope.setExtra(info.metadata);
+            scope.setExtras(info.metadata);
+            if (thereIsErrorExtraData) {
+                Sentry.captureException(error);
+            }
+            else Sentry.captureMessage(info.message);
+
         });
 
-        if (thereIsErrorExtraData) {
-            Sentry.captureException(error);
-        }
-        else Sentry.captureMessage(info.message);
+
 
         return next();
     }
