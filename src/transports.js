@@ -52,7 +52,8 @@ class SentryTransport extends Transport {
         Sentry.withScope((scope) => {
             scope.setLevel(this._levelsMap[info.level]);
             scope.setTag("traceId", info.traceId)
-            scope.setExtras(info.metadata);
+            scope.setContext(info)
+            scope.setExtras(info);
             if (thereIsErrorExtraData) {
                 Sentry.captureException(error);
             }
