@@ -74,24 +74,22 @@ function formatParams(params, module, funcCallerParam) {
     }
 
     for (let i = 1; i < params.length; i++) {
-        if (params[i] instanceof Error) {
+        if (params[i] instanceof Error && !metadata.error) {
             metadata.error = params[i];
         } else if (params[i] && typeof params[i] === 'object') {
             if (!metadata.extra) {
                 metadata.extra = {};
             }
-            const name = (params[i].constructor && params[i].constructor.name) || params[i].name
+            const name = (params[i].constructor && params[i].constructor.name) || params[i].name;
 
             if (name) {
-                if (name in metadata.extra) {
-                    Object.assign(metadata.extra[name], params[i])
-                }
-                else {
-                    metadata.extra[name] = params[i]
-                }
+                let suffix = 0
+                for (; name + '.' + suffix.toString() in metadata.extra; suffix++) { }
+
+                metadata.extra[name + '.' + suffix.toString()] = params[i];
             }
             else {
-                Object.assign(metadata.extra, params[i]);
+                metadata.extra = Object.assign(metadata.extra, params[i]);
             }
         }
     }
