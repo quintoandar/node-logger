@@ -6,7 +6,7 @@ declare module quintoandar_logger {
     type LogLevels = "error" | "warn" | "debug" | "info"
     type Logger = Record<LogLevels, LoggerMethod>
 
-    type SentryFunc = ((Sentry) => void)
+    type SentryFunc = ((Sentry: Sentry) => void)
     type TracerBase = {
         readonly active: boolean;
     }
