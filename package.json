@@ -11,6 +11,9 @@
     "winston": "^3.3.3",
     "winston-transport": "^4.4.0"
   },
+  "devDependencies": {
+    "@sentry/types": "^6.1.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
