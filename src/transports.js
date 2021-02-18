@@ -54,6 +54,9 @@ class SentryTransport extends Transport {
             if (info.traceId) {
                 scope.setTag("traceId", info.traceId)
             }
+            if(info.team) {
+                scope.setTag('team', info.team)
+            }
             scope.setContext(info)
             scope.setExtras(info);
             if (thereIsErrorExtraData) {
