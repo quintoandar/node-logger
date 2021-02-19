@@ -104,9 +104,9 @@ At your console, the logs now contain the trace-id identifier:
 ```
 
 ### Team
-We have added a new concept that allow define a team that own the error.
+We have added a new concept that allows defining a team that owns the error.
 
-If you create a custom error that contains a _team_ property, this value will appear as _team_ tag on sentry. It is useful in cross applications, like jaiminho, us-emails, markito, etc, because we can group error by team
+If you create a custom error that contains a _team_ property, this value will appear as _team_ tag on sentry. It is useful in cross applications, like jaiminho, us-emails, markito, etc, because we can group errors by team
 
 ## TODO
 
