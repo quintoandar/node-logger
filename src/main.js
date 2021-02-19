@@ -94,6 +94,10 @@ function formatParams(params, module, funcCallerParam) {
         }
     }
 
+    if (metadata.error && metadata.error.team) {
+        metadata.team = metadata.error.team
+    }
+
     if(module) {
         metadata.module = module;
     }

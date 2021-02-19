@@ -103,6 +103,11 @@ At your console, the logs now contain the trace-id identifier:
 [info] Some info about processing cool object with id 11 [trace-id: TRACER-ID] { extra: { id: 11, someInfo: 'someInfo' } }, module: 'path/to/my/file.js', timestamp: '2020-06-09T22:46:21.759Z'}
 ```
 
+### Team
+We have added a new concept that allow define a team that own the error.
+
+If you create a custom error that contains a _team_ property, this value will appear as _team_ tag on sentry. It is useful in cross applications, like jaiminho, us-emails, markito, etc, because we can group error by team
+
 ## TODO
 
 - Create Express Middleware Request Logger

@@ -1,10 +1,10 @@
 {
   "name": "quintoandar-logger",
-  "version": "3.3.3",
+  "version": "3.3.4",
   "description": "Winston logger with custom 5A configuration",
   "main": "src/main.js",
   "dependencies": {
-    "@sentry/node": "^5.27.2",
+    "@sentry/node": "^5.30.0",
     "lodash": "^4.17.20",
     "stack-trace": "0.0.10",
     "util": "^0.12.3",
