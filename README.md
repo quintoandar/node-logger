@@ -83,8 +83,6 @@ const logger = quintoandarLogger.startSentry(sentryParams).getLogger(module)
 
 ### Tracer
 
-If your project is using the honeycomb tracer library, you can include the tracer Id of the instance running to the logger.
-
 On your code, you just need to intanciate the tracer within the logger library once.
 
 ```js
