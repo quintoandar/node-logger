@@ -1,18 +1,18 @@
 {
   "name": "quintoandar-logger",
-  "version": "3.3.5",
+  "version": "3.3.6",
   "description": "Winston logger with custom 5A configuration",
   "main": "src/main.js",
   "dependencies": {
-    "@sentry/node": "^6.7.2",
+    "@sentry/node": "^6.18.1",
     "lodash": "^4.17.21",
     "stack-trace": "0.0.10",
     "util": "^0.12.4",
-    "winston": "^3.3.3",
-    "winston-transport": "^4.4.0"
+    "winston": "^3.6.0",
+    "winston-transport": "^4.5.0"
   },
   "devDependencies": {
-    "@sentry/types": "^6.7.2"
+    "@sentry/types": "^6.18.1"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
