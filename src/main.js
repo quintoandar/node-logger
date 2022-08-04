@@ -222,12 +222,12 @@ const logger = {
     },
 
     setShouldObfuscate: (obf) => {
+        shouldObfuscate = obf
         return logger
     }
 };
 
 const obfuscator = (content, after = [], keepList = []) => {
-    console.log(shouldObfuscate)
     return shouldObfuscate ? obfuscate(content, after, keepList) : content
 }
 
