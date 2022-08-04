@@ -222,7 +222,6 @@ const logger = {
     },
 
     setShouldObfuscate: (obf) => {
-        shouldObfuscate = obf
         return logger
     }
 };
