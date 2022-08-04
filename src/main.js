@@ -7,6 +7,7 @@ const {
     sentryTransport,
     consoleTransport,
 } = require('./transports');
+const { obfuscate } = require('./obfuscate')
 
 const winstonTransports = [
     sentryTransport,
@@ -157,6 +158,7 @@ const _consoleWarn = console.warn;
 
 const sentryMessageToAvoid = 'Sentry Logger';
 const sentryMessageType = 'string';
+let shouldObfuscate;
 
 if (process.env.NODE_ENV !== 'test') {
     console.log = function (...params) {
@@ -217,7 +219,18 @@ const logger = {
             info: (...params) => infoLog(module, ...params),
             debug: (...params) => debugLog(module, ...params),
         };
+    },
+
+    setShouldObfuscate: (obf) => {
+        shouldObfuscate = obf
+        return logger
     }
 };
 
+const obfuscator = (content, after = [], keepList = []) => {
+    console.log(shouldObfuscate)
+    return shouldObfuscate ? obfuscate(content, after, keepList) : content
+}
+
 module.exports = logger;
+module.exports.obfuscator = obfuscator;
