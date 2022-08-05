@@ -7,6 +7,10 @@ declare module quintoandar_logger {
     type Logger = Record<LogLevels, LoggerMethod>
 
     type SentryFunc = ((Sentry: Sentry) => void)
+    type SentryOptions = {
+        params: Record<string, string | number>
+        sentryFunction?: SentryFunc
+    }
     type TracerBase = {
         readonly active: boolean;
     }
@@ -17,6 +21,7 @@ declare module quintoandar_logger {
     function startSentry(newSentryParams: SentryParams, sentryFunc: SentryFunc): QuintoLogger
     function obfuscator(content: unknown, after: string[] = [], keepList: string[] = []): unknown
     function setShouldObfuscate(obf: boolean): QuintoLogger
+    function init(mod: NodeModule, sentryParams?: SentryOptions, tracer?: TracerBase, obfuscation?: boolean): QuintoLogger
     
     interface QuintoLogger {
         getLogger: typeof getLogger
@@ -24,6 +29,7 @@ declare module quintoandar_logger {
         startSentry: typeof startSentry
         obfuscator: typeof obfuscator
         setShouldObfuscate: typeof setShouldObfuscate
+        init: typeof init
     }
 }
 

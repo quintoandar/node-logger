@@ -189,41 +189,55 @@ if (process.env.NODE_ENV !== 'test') {
     };
 }
 
-const logger = {
-    setTracer: (newTracer) =>  {
-        tracer = newTracer;
-        return logger;
-    },
-    startSentry: (newSentryParams, sentryFunction) => {
-        Object.assign(sentryParams, newSentryParams);
+const setTracer = (newTracer) =>  {
+    tracer = newTracer;
+    return logger;
+}
 
-        if(sentryParams.dsn && !sentryParams.debug) {
-            Sentry.init(sentryParams);
-            if (process.env.SENTRY_APP) {
-                Sentry.setTag('app', process.env.SENTRY_APP)
-            }
+const startSentry = (newSentryParams, sentryFunction) => {
+    Object.assign(sentryParams, newSentryParams);
 
-            if (sentryFunction && typeof(sentryFunction) === 'function') {
-                sentryFunction(Sentry)
-            }
+    if(sentryParams.dsn && !sentryParams.debug) {
+        Sentry.init(sentryParams);
+        if (process.env.SENTRY_APP) {
+            Sentry.setTag('app', process.env.SENTRY_APP)
         }
-        return logger;
-    },
 
-    getLogger: (mod) => {
-        const module = mod.filename.split('/').slice(-2).join('/');
+        if (sentryFunction && typeof(sentryFunction) === 'function') {
+            sentryFunction(Sentry)
+        }
+    }
+    return logger;
+}
 
-        return {
-            error: (...params) => errorLog(module, ...params),
-            warn: (...params) => warnLog(module, ...params),
-            info: (...params) => infoLog(module, ...params),
-            debug: (...params) => debugLog(module, ...params),
-        };
-    },
+const getLogger = (mod) => {
+    const module = mod.filename.split('/').slice(-2).join('/');
 
-    setShouldObfuscate: (obf) => {
-        shouldObfuscate = obf
-        return logger
+    return {
+        error: (...params) => errorLog(module, ...params),
+        warn: (...params) => warnLog(module, ...params),
+        info: (...params) => infoLog(module, ...params),
+        debug: (...params) => debugLog(module, ...params),
+    };
+}
+
+const setShouldObfuscate = (obf) => {
+    shouldObfuscate = obf
+    return logger
+}
+
+const logger = {
+    setTracer,
+    startSentry,
+    getLogger,
+    setShouldObfuscate,
+    init: (mod, sentryParams, tracer, obfuscation) => {
+        if (sentryParams)
+          startSentry({...sentryParams})
+        if (tracer)
+          setTracer(tracer)
+        setShouldObfuscate(obfuscation)
+        return getLogger(mod)
     }
 };
 
