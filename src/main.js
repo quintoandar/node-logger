@@ -7,6 +7,7 @@ const {
     sentryTransport,
     consoleTransport,
 } = require('./transports');
+const { obfuscate } = require('./obfuscate')
 
 const winstonTransports = [
     sentryTransport,
@@ -157,6 +158,7 @@ const _consoleWarn = console.warn;
 
 const sentryMessageToAvoid = 'Sentry Logger';
 const sentryMessageType = 'string';
+let shouldObfuscate;
 
 if (process.env.NODE_ENV !== 'test') {
     console.log = function (...params) {
@@ -187,37 +189,61 @@ if (process.env.NODE_ENV !== 'test') {
     };
 }
 
-const logger = {
-    setTracer: (newTracer) =>  {
-        tracer = newTracer;
-        return logger;
-    },
-    startSentry: (newSentryParams, sentryFunction) => {
-        Object.assign(sentryParams, newSentryParams);
+const setTracer = (newTracer) =>  {
+    tracer = newTracer;
+    return logger;
+}
 
-        if(sentryParams.dsn && !sentryParams.debug) {
-            Sentry.init(sentryParams);
-            if (process.env.SENTRY_APP) {
-                Sentry.setTag('app', process.env.SENTRY_APP)
-            }
+const startSentry = (newSentryParams, sentryFunction) => {
+    Object.assign(sentryParams, newSentryParams);
 
-            if (sentryFunction && typeof(sentryFunction) === 'function') {
-                sentryFunction(Sentry)
-            }
+    if(sentryParams.dsn && !sentryParams.debug) {
+        Sentry.init(sentryParams);
+        if (process.env.SENTRY_APP) {
+            Sentry.setTag('app', process.env.SENTRY_APP)
         }
-        return logger;
-    },
 
-    getLogger: (mod) => {
-        const module = mod.filename.split('/').slice(-2).join('/');
+        if (sentryFunction && typeof(sentryFunction) === 'function') {
+            sentryFunction(Sentry)
+        }
+    }
+    return logger;
+}
 
-        return {
-            error: (...params) => errorLog(module, ...params),
-            warn: (...params) => warnLog(module, ...params),
-            info: (...params) => infoLog(module, ...params),
-            debug: (...params) => debugLog(module, ...params),
-        };
+const getLogger = (mod) => {
+    const module = mod.filename.split('/').slice(-2).join('/');
+
+    return {
+        error: (...params) => errorLog(module, ...params),
+        warn: (...params) => warnLog(module, ...params),
+        info: (...params) => infoLog(module, ...params),
+        debug: (...params) => debugLog(module, ...params),
+    };
+}
+
+const setShouldObfuscate = (obf) => {
+    shouldObfuscate = obf
+    return logger
+}
+
+const logger = {
+    setTracer,
+    startSentry,
+    getLogger,
+    setShouldObfuscate,
+    init: (mod, sentryParamsInit, tracerInit, obfuscation) => {
+        if (sentryParamsInit)
+          startSentry({...sentryParamsInit})
+        if (tracerInit)
+          setTracer(tracerInit)
+        setShouldObfuscate(obfuscation)
+        return getLogger(mod)
     }
 };
 
+const obfuscator = (content, after = [], keepList = []) => {
+    return shouldObfuscate ? obfuscate(content, after, keepList) : content
+}
+
 module.exports = logger;
+module.exports.obfuscator = obfuscator;

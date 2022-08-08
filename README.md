@@ -95,6 +95,23 @@ const object = { id: 11, someInfo: 'someInfo' }
 logger.info(`Some info about processing cool object with id ${object.id}`, object } });
 ```
 
+### Obfuscation
+
+For security reasons you can obfuscate sensitive information from the logs. You can also disable obfuscation based on the environment.
+
+```js
+const quintoandarLogger = require('quintoandar-logger');
+const logger = quintoandarLogger.setShouldObfuscate(true).getLogger(module);
+```
+
+Whenever you need to obfuscate log information call:
+
+```js
+logger.info('Log message', obfuscate(payload))
+```
+
+then all values in the payload object will be obfuscated.
+
 At your console, the logs now contain the trace-id identifier:
 
 ```sh
