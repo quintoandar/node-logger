@@ -231,11 +231,11 @@ const logger = {
     startSentry,
     getLogger,
     setShouldObfuscate,
-    init: (mod, sentryParams, tracer, obfuscation) => {
-        if (sentryParams)
-          startSentry({...sentryParams})
-        if (tracer)
-          setTracer(tracer)
+    init: (mod, sentryParamsInit, tracerInit, obfuscation) => {
+        if (sentryParamsInit)
+          startSentry({...sentryParamsInit})
+        if (tracerInit)
+          setTracer(tracerInit)
         setShouldObfuscate(obfuscation)
         return getLogger(mod)
     }

@@ -21,7 +21,7 @@ declare module quintoandar_logger {
     function startSentry(newSentryParams: SentryParams, sentryFunc: SentryFunc): QuintoLogger
     function obfuscator(content: unknown, after: string[] = [], keepList: string[] = []): unknown
     function setShouldObfuscate(obf: boolean): QuintoLogger
-    function init(mod: NodeModule, sentryParams?: SentryOptions, tracer?: TracerBase, obfuscation?: boolean): QuintoLogger
+    function init(mod: NodeModule, sentryParamsInit?: SentryOptions, tracerInit?: TracerBase, obfuscation?: boolean): QuintoLogger
     
     interface QuintoLogger {
         getLogger: typeof getLogger
