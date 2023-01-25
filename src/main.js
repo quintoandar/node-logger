@@ -6,12 +6,15 @@ const { createLogger } = require('winston');
 const {
     sentryTransport,
     consoleTransport,
+    consoleTransportJson,
 } = require('./transports');
 const { obfuscate } = require('./obfuscate')
 
+const prettyLogs = process.env.PRETTY_LOGS;
+const json_logs = process.env.JSON_LOGS;
 const winstonTransports = [
     sentryTransport,
-    consoleTransport,
+    json_logs ? consoleTransportJson : consoleTransport,
 ];
 
 let tracer;
@@ -24,7 +27,6 @@ let sentryParams = {
     normalizeDepth: 5,
 };
 
-const prettyLogs = process.env.PRETTY_LOGS;
 const winstonLogger = createLogger({
     transports: winstonTransports,
 });
@@ -58,6 +60,9 @@ function formatParams(params, module, funcCallerParam) {
 
     if (tracer && tracer.currentRootSpan && tracer.currentRootSpan.traceId) {
         metadata.traceId = tracer.currentRootSpan.traceId;
+        if (tracer.currentRootSpan.spanContext && tracer.currentRootSpan.spanContext.spanId) {
+            metadata.spanId = tracer.currentRootSpan.spanContext.spanId;
+        }
     }
 
     if (typeof params[0] === 'string') {
