@@ -88,6 +88,9 @@ let loggerFormat = format.combine(
         if (info.traceId) {
             out += ` [trace-id: ${info.traceId}]`;
         }
+        if (metadata && metadata.spanId) {
+            out += ` [span-id: ${metadata.spanId}]`;
+        }
 
         const error = info.metadata.error;
 
@@ -117,10 +120,20 @@ let loggerFormat = format.combine(
     }),
 );
 
+let jsonLoggerFormat = format.combine(
+    format.timestamp(),
+    format.metadata({ fillExcept }),
+    format.json()
+);
+
 if (prettyLogs) {
     loggerFormat = format.combine(
         format.colorize(),
         loggerFormat,
+    );
+    jsonLoggerFormat = format.combine(
+        format.colorize(),
+        jsonLoggerFormat,
     );
 }
 
@@ -130,7 +143,14 @@ const consoleTransport = new transports.Console({
     stderrLevels: ['error'],
 });
 
+const consoleTransportJson = new transports.Console({
+    format: jsonLoggerFormat,
+    level: process.env.CONSOLE_LOG_LEVEL || 'info',
+    stderrLevels: ['error'],
+});
+
 module.exports = {
     sentryTransport,
     consoleTransport,
+    consoleTransportJson,
 };
