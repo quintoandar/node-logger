@@ -11,6 +11,7 @@ Winston logger with sentry configuration included. Also show the module, file pa
 | CONSOLE_LOG_LEVEL    | The level of the logs displayed on the console (optional, defaults to info) |
 | NODE_ENV             | The application environment running (development, test, production) |
 | PRETTY_LOGS          | Enable colored logs with clean spacing       |
+| JSON_LOGS            | Enable structured logs as JSON               |
 | SENTRY_APP           | The application's name                       |
 | SENTRY_DSN           | Sentry's DNS                                 |
 | SENTRY_ENVIRONMENT   | The environment running (dev, staging, prod) |
