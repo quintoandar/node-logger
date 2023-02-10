@@ -61,7 +61,11 @@ function formatParams(params, module, funcCallerParam) {
     if (tracer && tracer.currentRootSpan && tracer.currentRootSpan.traceId) {
         const allDescendants = tracer.currentRootSpan.allDescendants().map((span) => span.id)
         metadata.traceId = tracer.currentRootSpan.traceId;
-        metadata.spanIds = [tracer.currentRootSpan.parentSpanId, tracer.currentRootSpan.id, allDescendants].flat()
+        metadata.spans = {
+            parentSpanId: tracer.currentRootSpan.parentSpanId ? tracer.currentRootSpan.parentSpanId : null,
+            spanId: tracer.currentRootSpan.id,
+            descendants: allDescendants,
+        }
     }
 
     if (typeof params[0] === 'string') {
