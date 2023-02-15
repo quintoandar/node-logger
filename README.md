@@ -12,6 +12,7 @@ Winston logger with sentry configuration included. Also show the module, file pa
 | NODE_ENV             | The application environment running (development, test, production) |
 | PRETTY_LOGS          | Enable colored logs with clean spacing       |
 | JSON_LOGS            | Enable structured logs as JSON               |
+| SPAN_INFO            | Enable span context info on logs             | 
 | SENTRY_APP           | The application's name                       |
 | SENTRY_DSN           | Sentry's DNS                                 |
 | SENTRY_ENVIRONMENT   | The environment running (dev, staging, prod) |
