@@ -12,6 +12,7 @@ const { obfuscate } = require('./obfuscate')
 
 const prettyLogs = process.env.PRETTY_LOGS;
 const json_logs = process.env.JSON_LOGS;
+const span_info = process.env.SPAN_INFO;
 const winstonTransports = [
     sentryTransport,
     json_logs ? consoleTransportJson : consoleTransport,
@@ -61,10 +62,13 @@ function formatParams(params, module, funcCallerParam) {
     if (tracer && tracer.currentRootSpan && tracer.currentRootSpan.traceId) {
         const allDescendants = tracer.currentRootSpan.allDescendants().map((span) => span.id)
         metadata.traceId = tracer.currentRootSpan.traceId;
-        metadata.spans = {
-            parentSpanId: tracer.currentRootSpan.parentSpanId ? tracer.currentRootSpan.parentSpanId : null,
-            spanId: tracer.currentRootSpan.id,
-            descendants: allDescendants,
+        if (span_info) {
+            metadata.spans = {
+                parentSpanId: tracer.currentRootSpan.parentSpanId ? tracer.currentRootSpan.parentSpanId : null,
+                spanId: tracer.currentRootSpan.id,
+                descendants: allDescendants,
+                attributes: metadata.attributes 
+            }
         }
     }
 
