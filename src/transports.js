@@ -88,9 +88,6 @@ let loggerFormat = format.combine(
         if (info.traceId) {
             out += ` [trace-id: ${info.traceId}]`;
         }
-        if (metadata && metadata.spanId) {
-            out += ` [span-id: ${metadata.spanId}]`;
-        }
 
         const error = info.metadata.error;
 
