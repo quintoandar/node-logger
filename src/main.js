@@ -60,9 +60,9 @@ function formatParams(params, module, funcCallerParam) {
     const metadata = {};
 
     if (tracer && tracer.currentRootSpan && tracer.currentRootSpan.traceId) {
-        const allDescendants = tracer.currentRootSpan.allDescendants().map((span) => span.id)
         metadata.traceId = tracer.currentRootSpan.traceId;
         if (span_info) {
+            const allDescendants = tracer.currentRootSpan.allDescendants().map((span) => span.id)
             metadata.spans = {
                 parentSpanId: tracer.currentRootSpan.parentSpanId ? tracer.currentRootSpan.parentSpanId : null,
                 spanId: tracer.currentRootSpan.id,
