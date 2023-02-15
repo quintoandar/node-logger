@@ -67,7 +67,7 @@ function formatParams(params, module, funcCallerParam) {
                 parentSpanId: tracer.currentRootSpan.parentSpanId ? tracer.currentRootSpan.parentSpanId : null,
                 spanId: tracer.currentRootSpan.id,
                 descendants: allDescendants,
-                attributes: metadata.attributes 
+                attributes: tracer.currentRootSpan.attributes 
             }
         }
     }
