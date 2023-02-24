@@ -6,7 +6,7 @@
   "dependencies": {
     "@sentry/node": "^7.38.0",
     "lodash": "^4.17.21",
-    "stack-trace": ".0.10",
+    "stack-trace": "0.0.10",
     "util": "^0.12.5",
     "winston": "^3.8.2",
     "winston-transport": "^4.5.0"
