@@ -59,19 +59,6 @@ function formatParams(params, module, funcCallerParam) {
     const result = [];
     const metadata = {};
 
-    if (tracer && tracer.currentRootSpan && tracer.currentRootSpan.traceId) {
-        metadata.traceId = tracer.currentRootSpan.traceId;
-        if (span_info) {
-            const allDescendants = tracer.currentRootSpan.allDescendants().map((span) => span.id)
-            metadata.rootSpan = {
-                parentSpanId: tracer.currentRootSpan.parentSpanId ? tracer.currentRootSpan.parentSpanId : null,
-                spanId: tracer.currentRootSpan.id,
-                descendants: allDescendants,
-                attributes: tracer.currentRootSpan.attributes 
-            }
-        }
-    }
-
     if (typeof params[0] === 'string') {
         result[0] = params[0];
     } else if (params[0] instanceof Error) {
@@ -103,6 +90,23 @@ function formatParams(params, module, funcCallerParam) {
             }
             else {
                 metadata.extra = Object.assign(metadata.extra, params[i]);
+            }
+        }
+    }
+
+    if (tracer && tracer.currentRootSpan && tracer.currentRootSpan.traceId) {
+        metadata.traceId = tracer.currentRootSpan.traceId;
+        if (span_info) {
+            const notificationContextId = tracer.currentRootSpan.attributes['notificationContextId'];
+            const droneBuild = tracer.currentRootSpan.attributes['data.drone.build']
+            const attributes = {
+                ...(notificationContextId) && { notificationContextId },
+                ...(droneBuild) && { droneBuild }
+            }
+            metadata.rootSpan = {
+                parentSpanId: tracer.currentRootSpan.parentSpanId ? tracer.currentRootSpan.parentSpanId : null,
+                spanId: tracer.currentRootSpan.id,
+                attributes
             }
         }
     }
