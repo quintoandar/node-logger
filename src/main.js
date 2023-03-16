@@ -1,6 +1,6 @@
 const os = require('os');
-const util = require('util');
-const stackTrace = require('stack-trace');
+const { inspect } = require('util');
+const { get: getStackTrace } = require('stack-trace');
 const Sentry = require('@sentry/node');
 const { createLogger } = require('winston');
 const {
@@ -37,7 +37,7 @@ function getFunctionCaller(func) {
 }
 
 function getFunctionData(func) {
-    const trace = stackTrace.get(func || getFunctionCaller(getFunctionData));
+    const trace = getStackTrace(func || getFunctionCaller(getFunctionData));
     const callerData = trace[0];
     const data = {
         filePath: `${callerData.getFileName()}:${callerData.getLineNumber()}:${callerData.getColumnNumber()}`,
@@ -65,7 +65,7 @@ function formatParams(params, module, funcCallerParam) {
         result[0] = params[0].message;
         metadata.error = params[0];
     } else {
-        result[0] = util.inspect(params[0], {
+        result[0] = inspect(params[0], {
             compact: prettyLogs,
             colors: prettyLogs,
             depth: null,
