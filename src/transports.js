@@ -1,4 +1,4 @@
-const _ = require('lodash');
+const { defaultsDeep, omit } = require('lodash');
 const Sentry = require('@sentry/node');
 const { transports, format } = require('winston');
 const Transport = require('winston-transport');
@@ -14,7 +14,7 @@ const escapeSequences = {
 class SentryTransport extends Transport {
     constructor(options) {
         options = options || {};
-        options = _.defaultsDeep(options, {
+        options = defaultsDeep(options, {
             name: 'SentryTransport',
             silent: false,
             level: process.env.SENTRY_LOGGER_LEVEL || 'warn',
@@ -28,7 +28,7 @@ class SentryTransport extends Transport {
             },
         });
 
-        super(_.omit(options, [
+        super(omit(options, [
             'levelsMap',
         ]));
 
