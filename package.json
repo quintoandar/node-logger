@@ -4,7 +4,7 @@
   "description": "Winston logger with custom 5A configuration",
   "main": "src/main.js",
   "dependencies": {
-    "@sentry/node": "^7.38.0",
+    "@sentry/node": "^7.119.1",
     "lodash": "^4.17.21",
     "stack-trace": "0.0.10",
     "util": "^0.12.5",
