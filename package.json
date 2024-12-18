@@ -4,6 +4,7 @@
   "description": "Winston logger with custom 5A configuration",
   "main": "src/main.js",
   "dependencies": {
+    "@opentelemetry/api": "^1.9.0",
     "@sentry/node": "^7.38.0",
     "lodash": "^4.17.21",
     "stack-trace": "0.0.10",

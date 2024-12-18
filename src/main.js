@@ -9,6 +9,7 @@ const {
     consoleTransportJson,
 } = require('./transports');
 const { obfuscate } = require('./obfuscate')
+const { trace, context } = require('@opentelemetry/api');
 
 const prettyLogs = process.env.PRETTY_LOGS;
 const json_logs = process.env.JSON_LOGS;
@@ -29,6 +30,22 @@ let sentryParams = {
 };
 
 const winstonLogger = createLogger({
+    level: 'info',
+    format: winston.format.combine(
+      winston.format.printf(({ level, message }) => {
+        const span = trace.getSpan(context.active());
+        let traceId = 'N/A';
+        let spanId = 'N/A';
+  
+        if (span) {
+          const spanContext = span.spanContext();
+          traceId = spanContext.traceId;
+          spanId = spanContext.spanId;
+        }
+  
+        return `[trace_id=${traceId}, span_id=${spanId}] ${level.toUpperCase()}: ${message}`;
+      })
+    ),
     transports: winstonTransports,
 });
 
